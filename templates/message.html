@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}All Blogs{% endblock %}
+{% block title %} {{ message.blog.name}} - {{ message.name }} {% endblock %}
 
 {% block content %}
 <hr>
@@ -25,6 +25,5 @@
     {% endfor %}
 </ul>
 {% endif %}
-
 
 {% endblock %}
