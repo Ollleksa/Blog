@@ -15,8 +15,7 @@ def signup(request):
     if request.method == 'POST':
         form = BlogUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit = False)
-            user.save()
+            user = form.save()
 
             current_site = get_current_site(request)
             mail_subject = 'Activate your account'
@@ -48,7 +47,6 @@ def activate(request, uidb64, token):
         user.is_verified = True
         user.save()
         login(request, user)
-        # return redirect('home')
         return render(request, 'registration/success_activation.html')
     else:
         return HttpResponse('Activation link is invalid!')

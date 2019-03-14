@@ -6,7 +6,11 @@ from django.contrib.auth.admin import UserAdmin
 from .models import BlogUser
 from .forms import BlogUserCreationForm, BlogUserChangeForm
 
+
 class BlogUserAdminView(UserAdmin):
+    """
+    Small changes to admin page, due to custom user
+    """
     add_form = BlogUserCreationForm
     form = BlogUserChangeForm
     model = BlogUser

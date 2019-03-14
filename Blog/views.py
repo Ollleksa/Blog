@@ -9,7 +9,13 @@ from django.template.loader import render_to_string
 from .models import Blog, Message, Comment
 from .forms import NewComment, NewMessage, NewBlog
 
+
 def check_auth(func):
+    """
+    Decorator for checking if user are authenticated, and verify it account by email
+    :param func: view function
+    :return: Normal page, or page with error message.
+    """
     def wrapper(request, **kwargs):
         user = request.user
         if not user.is_authenticated:
@@ -21,6 +27,7 @@ def check_auth(func):
         else:
             return func(request, **kwargs)
     return wrapper
+
 
 @check_auth
 def home(request):
@@ -35,6 +42,7 @@ def home(request):
 
     return HttpResponse(template.render(context, request))
 
+
 @check_auth
 def blog(request, blog_id):
 
@@ -43,7 +51,7 @@ def blog(request, blog_id):
     except Blog.DoesNotExist:
         raise Http404("Blog does not exist.")
 
-    message_list = Message.objects.filter(blog = blog).order_by('-timestamp')
+    message_list = Message.objects.filter(blog=blog).order_by('-timestamp')
 
     context = {
         'blog': blog,
@@ -54,6 +62,7 @@ def blog(request, blog_id):
 
     return HttpResponse(template.render(context, request))
 
+
 @check_auth
 def message(request, message_id):
 
@@ -62,7 +71,7 @@ def message(request, message_id):
     except Message.DoesNotExist:
         raise Http404("Entry does not exist.")
 
-    comment_list = Comment.objects.filter(message = mess).order_by('timestamp')
+    comment_list = Comment.objects.filter(message=mess).order_by('timestamp')
 
     if request.method == 'POST':
         form = NewComment(request.POST)
@@ -70,7 +79,7 @@ def message(request, message_id):
             new_com = Comment(message=mess, content=form.cleaned_data['content'], user=request.user)
             new_com.save()
             sent_email_comment(request, mess, new_com)
-            comment_list = Comment.objects.filter(message = mess).order_by('timestamp')
+            return HttpResponseRedirect(request.path_info)
     else:
         form = NewComment()
 
@@ -91,7 +100,7 @@ def create(request):
     current_user = request.user
 
     try:
-        user_blog = Blog.objects.get(user = current_user)
+        user_blog = Blog.objects.get(user=current_user)
     except Blog.DoesNotExist:
         return HttpResponseRedirect('../create_blog')
 
@@ -120,7 +129,7 @@ def create_blog(request):
         if form.is_valid():
             new_blog = Blog(name=form.cleaned_data['name'], user=request.user)
             new_blog.save()
-            return HttpResponseRedirect('blog/create')
+            return HttpResponseRedirect('blog/create_message')
     else:
         form = NewBlog()
 
@@ -133,6 +142,13 @@ def create_blog(request):
 
 
 def sent_email_comment(request, mess, comment):
+    """
+    Send email about comment to user
+    :param request: request on creation of commment
+    :param mess: message which is commented
+    :param comment: comment
+    :return if user comment its own message - sent nothing
+    """
     if mess.blog.user == request.user:
         return None
 
