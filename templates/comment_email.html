@@ -1,0 +1,10 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+User {{ comment.user.name }} commented your Message with next text:<br>
+
+{{ comment.content }}<br>
+
+Follow the link to message.
+http://{{ domain }}
+{% endautoescape %}

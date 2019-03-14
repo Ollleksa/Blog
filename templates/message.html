@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}All Blogs{% endblock %}
+
+{% block content %}
+<hr>
+<h2> {{ message.name }} </h2>
+<p> {{ message.content }} </p>
+
+<h3>You can comment here:</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Comment">
+</form>
+
+{% if comment_list %}
+<h3>Comments:</h3>
+<ul>
+    {% for comment in comment_list %}
+    <li>
+        <em>{{ comment.user.username }}</em> commented at: {{ comment.timestamp }} <br>
+        <em>{{ comment.content }}</em>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+{% endblock %}

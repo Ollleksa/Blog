@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}All Blogs{% endblock %}
+
+{% block content %}
+<hr>
+<h2> {{ blog.name }} </h2>
+
+{% if message_list %}
+<h3>Posts in blog:</h3>
+<table>
+    {% for message in message_list %}
+    <tr>
+    <th><a href="/message/{{ message.id }} "> {{ message.name }} </a></th>
+    <th>{{ message.timestamp }}</th>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+
+{% endblock %}

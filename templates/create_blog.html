@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MyBlog - Create new your blog{% endblock %}
+
+{% block content %}
+<h2>Set name for your blog, {{ user.username }}.</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Create">
+</form>
+{% endblock %}
