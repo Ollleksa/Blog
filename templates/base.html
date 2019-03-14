@@ -15,13 +15,24 @@
     <div class="navi">
     {% block nav %}
     <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'create' %}">Create</a>
     {% endblock %}
+    </div>
+    <hr/>
+    <div class="log">
+{% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Log Out</a>
+{% else %}
+    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
     </div>
 </nav>
 
 <nav class="edit">
     <div>
         {% if user.is_superuser %}
+        <hr/>
         <a href="/admin">Admin</a>
         {% endif %}
         {% block actions %}

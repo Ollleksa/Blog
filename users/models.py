@@ -10,4 +10,4 @@ class BlogUser(AbstractUser):
     is_verified = models.BooleanField(default = False)
 
     def __str__(self):
-        return 'User: {username}'.format(username=self.username)
+        return self.username
